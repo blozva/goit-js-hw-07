@@ -15,18 +15,22 @@ console.log(gallery);
 
 
 const pictureElements = galleryItems.map(
-    img => `<li class = "gallery__item"><img src="${img.preview}" srcset="${img.preview} 1x, ${img.original} 2x" alt="${img.description}" class="gallery__image"></li>`
+    img => `<li class = "gallery__item">
+    <a class="gallery__link" href="${img.original}">
+    <img class="gallery__image" src="${img.preview}" data-source="${img.original}" alt="${img.description}">
+    </a></li>`
 ).join('');
 galleryEl.insertAdjacentHTML("beforeend", pictureElements);
 
-document.querySelectorAll('img.gallery__image').forEach(
+document.querySelectorAll('a.gallery__link').forEach(
     function (element) {
         element.addEventListener('click', showPicture);
     }
 )
 
 function showPicture(event) {
-    const picture = event.target.srcset.split(' ')[2];
+    event.preventDefault();
+    const picture = event.target.getAttribute('data-source');
     const instance = basicLightbox.create(`
         <img src="${picture}" width="100%">
     `);
